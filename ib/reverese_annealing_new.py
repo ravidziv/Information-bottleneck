@@ -503,7 +503,7 @@ def run_annealing_tries(mybetaS, PTX0, PXs, PYX, PYs, what_to_do, pertub_probS, 
 
     for k in range(0, NB):
         mybeta = mybetaS[k]
-        print ('Running beta ={0:.2f}, indexs {1} from {2}'.format (mybeta, k, NB))
+        print ('Running beta ={0:.2f}, indexs {1} from b -  {2}'.format (mybeta, k, NB))
 
         #[PCX_emp, PYC_emp, PTs_emp, bL, Ls, ICX, IYC] = do_annealing(emp_PXs,emp_PYs , PCX_emp, emp_PYX, ITER, mybeta,
         [PCX_emp, PYC_emp, PTs_emp, bL, Ls, ICX, IYC] = do_annealing(emp_PXs, emp_PYs, PCX_emp, emp_PYX, ITER, mybeta,
@@ -519,6 +519,7 @@ def run_annealing_tries(mybetaS, PTX0, PXs, PYX, PYs, what_to_do, pertub_probS, 
         PTs = PTs / np.sum(PTs)
         PTs[emp_x_indeces] = PTs_emp
         PTs = PTs / np.sum(PTs)
+
         pys = np.dot(PYX_rand, PXs)
 
         #p_t_given_x_all,pts = cluster_xs(PXs, PYC_emp,PYX_rand,PTs_emp, mybeta)
