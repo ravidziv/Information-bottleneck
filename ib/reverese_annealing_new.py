@@ -519,12 +519,12 @@ def run_annealing_tries(mybetaS, PTX0, PXs, PYX, PYs, what_to_do, pertub_probS, 
         PTs = PTs / np.sum(PTs)
         PTs[emp_x_indeces] = PTs_emp
         PTs = PTs / np.sum(PTs)
-        pys = np.dot(PYC_emp_n, PTs)
+        pys = np.dot(PYX_rand, PXs)
 
         #p_t_given_x_all,pts = cluster_xs(PXs, PYC_emp,PYX_rand,PTs_emp, mybeta)
         p_t_given_x_all,pts = cluster_xs(PXs, PYC_emp_n,PYX_rand,PTs, mybeta)
 
-        p_y_given_t_all = calc_decoder(p_t_given_x_all, PXs,PYX )
+        p_y_given_t_all = calc_decoder(p_t_given_x_all, PXs,PYX_rand )
         #ITX_all, IYT_all = iu.calc_information(p_t_given_x_all.astype(np.longdouble), p_y_given_t_all.astype(np.longdouble), PXs.astype(np.longdouble), PYs.astype(np.longdouble), PTs_emp.astype(np.longdouble))
         ITX_all, IYT_all = iu.calc_information(p_t_given_x_all.astype(np.longdouble), p_y_given_t_all.astype(np.longdouble), PXs.astype(np.longdouble), pys.astype(np.longdouble), pts.astype(np.longdouble))
 
