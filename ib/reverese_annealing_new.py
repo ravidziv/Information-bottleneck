@@ -514,20 +514,25 @@ def run_annealing_tries(mybetaS, PTX0, PXs, PYX, PYs, what_to_do, pertub_probS, 
         #PTs_all.append(PTs)
         PYC_emp_n =np.random.rand(PYX.shape[0],PYX.shape[1] )
         PYC_emp_n = PYC_emp_n / np.sum(PYC_emp_n, axis=0)[np.newaxis, :]
+        #PYC_emp_n = PYX_rand
         PYC_emp_n[:, emp_x_indeces] = PYC_emp
         PTs = np.random.rand(PXs.shape[0])
         PTs = PTs / np.sum(PTs)
         PTs[emp_x_indeces] = PTs_emp
         PTs = PTs / np.sum(PTs)
 
-        pys = np.dot(PYX_rand, PXs)
 
         #p_t_given_x_all,pts = cluster_xs(PXs, PYC_emp,PYX_rand,PTs_emp, mybeta)
         p_t_given_x_all,pts = cluster_xs(PXs, PYC_emp_n,PYX_rand,PTs, mybeta)
+        p_t_given_x_all[:, emp_x_indeces] =0
+        for k in range(emp_x_indeces.shape[0]):
+            p_t_given_x_all[emp_x_indeces[k], emp_x_indeces] =PCX_emp[k,:]
+        p_y_given_t_all = calc_decoder(p_t_given_x_all, PXs,PYX )
+        p_t_given_x_all,pts = cluster_xs(PXs, p_y_given_t_all,PYX_rand,pts, mybeta)
+        pys = np.dot(p_y_given_t_all, pts)
 
-        p_y_given_t_all = calc_decoder(p_t_given_x_all, PXs,PYX_rand )
         #ITX_all, IYT_all = iu.calc_information(p_t_given_x_all.astype(np.longdouble), p_y_given_t_all.astype(np.longdouble), PXs.astype(np.longdouble), PYs.astype(np.longdouble), PTs_emp.astype(np.longdouble))
-        ITX_all, IYT_all = iu.calc_information(p_t_given_x_all.astype(np.longdouble), p_y_given_t_all.astype(np.longdouble), PXs.astype(np.longdouble), pys.astype(np.longdouble), pts.astype(np.longdouble))
+        ITX_all, IYT_all = iu.calc_information(p_t_given_x_all.astype(np.longdouble), PYC_emp_n.astype(np.longdouble), PXs.astype(np.longdouble), pys.astype(np.longdouble), pts.astype(np.longdouble))
 
         print  ('Final information - ', ICX, IYC,ITX_all, IYT_all)
 
